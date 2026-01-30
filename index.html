@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MF DOGE</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #1a1a1a;
+      --text: #00ff00;
+      --accent: #00ff00;
+      --yellow: #ffcc00;
+      --charcoal: #2c2c2c;
+    }
+    @media (prefers-color-scheme: light) {
+      :root {
+        --bg: #f0f0f0;
+        --text: #333;
+        --accent: #006600;
+      }
+    }
+    body {
+      margin: 0;
+      font-family: 'Press Start 2P', cursive;
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+      min-height: 100vh;
+      position: relative;
+    }
+    canvas {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: -1;
+      opacity: 0.7;
+    }
+    header {
+      text-align: center;
+      padding: 2rem 1rem;
+      background: rgba(0,0,0,0.5);
+      backdrop-filter: blur(5px);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    h1 {
+      font-size: 2.5rem;
+      margin: 0;
+      color: var(--yellow);
+      text-shadow: 0 0 10px var(--yellow);
+    }
+    #ticker {
+      font-size: 1.2rem;
+      margin-top: 1rem;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem 1rem;
+    }
+    .buttons {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 1.5rem;
+      margin: 3rem 0;
+    }
+    .btn {
+      background: var(--charcoal);
+      border: 3px solid var(--accent);
+      color: var(--accent);
+      padding: 1.5rem;
+      font-size: 1.1rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s;
+      box-shadow: 0 0 15px rgba(0,255,0,0.2);
+      border-radius: 8px;
+    }
+    .btn:hover {
+      transform: scale(1.15);
+      box-shadow: 0 0 30px var(--accent);
+    }
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(0,0,0,0.8);
+      backdrop-filter: blur(10px);
+      display: flex;
+      justify-content: space-around;
+      padding: 1rem 0;
+      border-top: 2px solid var(--accent);
+      z-index: 100;
+    }
+    .nav-btn {
+      background: none;
+      border: none;
+      color: var(--accent);
+      font-family: 'Press Start 2P', cursive;
+      font-size: 0.9rem;
+      cursor: pointer;
+      padding: 0.8rem 1rem;
+      transition: all 0.3s;
+    }
+    .nav-btn:hover { transform: scale(1.2); }
+
+    .modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.9);
+      z-index: 200;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+    .modal-content {
+      background: var(--charcoal);
+      border: 4px solid var(--accent);
+      max-width: 90%;
+      max-height: 90vh;
+      overflow: auto;
+      padding: 2rem;
+      position: relative;
+      border-radius: 12px;
+    }
+    .close {
+      position: absolute;
+      top: 1rem; right: 1.5rem;
+      font-size: 2rem;
+      cursor: pointer;
+      color: var(--accent);
+    }
+
+    @media (max-width: 600px) {
+      h1 { font-size: 2rem; }
+      .buttons { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<canvas id="matrix"></canvas>
+
+<header>
+  <h1>MF DOGE</h1>
+  <div id="ticker">DOGE: Loading...</div>
+</header>
+
+<div class="container">
+  <div class="buttons">
+    <div class="btn" onclick="openModal('kofi')">Ko-fi Support</div>
+    <div class="btn" onclick="window.open('https://your-app-link.com', '_blank')">App 1</div>
+    <div class="btn" onclick="window.open('https://your-link.com', '_blank')">App 2</div>
+    <div class="btn" onclick="window.open('https://t.me/yourgroup', '_blank')">Telegram</div>
+    <div class="btn" onclick="window.open('https://x.com/MFDOGEX', '_blank')">@MFDOGEX</div>
+    <div class="btn" onclick="openModal('memes')">Memes & Facts</div>
+    <!-- Add more buttons here -->
+  </div>
+
+  <section>
+    <h2 style="text-align:center; color:var(--yellow);">Facts & Chaos</h2>
+    <p style="text-align:center;">Much wow. Such edge. Very DOGE.</p>
+    <!-- Drop your memes/facts here -->
+  </section>
+</div>
+
+<nav class="bottom-nav">
+  <button class="nav-btn" onclick="openModal('apps')">Apps</button>
+  <button class="nav-btn" onclick="openModal('kofi')">Ko-fi</button>
+  <button class="nav-btn" onclick="openModal('more')">More</button>
+</nav>
+
+<!-- Modals -->
+<div id="kofiModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal('kofiModal')">&times;</span>
+    <iframe id='kofiframe' src='https://ko-fi.com/shinrallc/?hidefeed=true&widget=true&embed=true&preview=true' style='border:none;width:100%;padding:4px;background:#f9f9f9;' height='712' title='shinrallc'></iframe>
+  </div>
+</div>
+
+<div id="memesModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal('memesModal')">&times;</span>
+    <h2>Memes & Facts</h2>
+    <p>Placeholder: Insert epic DOGE memes / X embeds here later.</p>
+  </div>
+</div>
+
+<div id="appsModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal('appsModal')">&times;</span>
+    <h2>Apps & Links</h2>
+    <p>More app buttons or list here.</p>
+  </div>
+</div>
+
+<div id="moreModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal('moreModal')">&times;</span>
+    <h2>More Stuff</h2>
+    <p>Extra chaos goes here.</p>
+  </div>
+</div>
+
+<script>
+// Matrix Rain
+const canvas = document.getElementById('matrix');
+const ctx = canvas.getContext('2d');
+
+canvas.height = window.innerHeight;
+canvas.width = window.innerWidth;
+
+const chars = 'アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+const fontSize = 14;
+const columns = canvas.width / fontSize;
+const drops = Array(Math.floor(columns)).fill(1);
+
+function draw() {
+  ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  
+  ctx.fillStyle = '#0f0';
+  ctx.font = fontSize + 'px monospace';
+  
+  drops.forEach((y, i) => {
+    const text = chars[Math.floor(Math.random() * chars.length)];
+    const x = i * fontSize;
+    ctx.fillText(text, x, y * fontSize);
+    
+    if (y * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
+    drops[i]++;
+  });
+}
+
+setInterval(draw, 35);
+
+window.addEventListener('resize', () => {
+  canvas.height = window.innerHeight;
+  canvas.width = window.innerWidth;
+});
+
+// Modal helpers
+function openModal(id) {
+  document.getElementById(id + 'Modal').style.display = 'flex';
+}
+function closeModal(id) {
+  document.getElementById(id).style.display = 'none';
+}
+
+// DOGE Ticker
+async function updateTicker() {
+  try {
+    const res = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=dogecoin&vs_currencies=usd&include_24hr_change=true');
+    const data = await res.json();
+    const price = data.dogecoin.usd.toFixed(4);
+    const change = data.dogecoin.usd_24h_change.toFixed(2);
+    const color = change >= 0 ? 'lime' : 'red';
+    document.getElementById('ticker').innerHTML = `DOGE: $${price} <span style="color:${color}">${change >= 0 ? '+' : ''}${change}% (24h)</span>`;
+  } catch (e) {
+    document.getElementById('ticker').textContent = 'DOGE: API down, much sad';
+  }
+}
+updateTicker();
+setInterval(updateTicker, 60000);
+
+// Close modals on outside click
+window.onclick = function(event) {
+  if (event.target.classList.contains('modal')) {
+    event.target.style.display = 'none';
+  }
+}
+</script>
+</body>
+</html>
